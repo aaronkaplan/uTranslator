@@ -1,0 +1,40 @@
+
+services:
+  traefik:
+    image: traefik:v3.1
+    command:
+      - "--providers.docker=true" # Enable Docker provider
+      - "--entrypoints.web.address=:80" # Define HTTP entrypoint
+      - "--entrypoints.websecure.address=:443" # Define HTTPS entrypoint
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=your-email@example.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"     # HTTP
+      - "443:443"   # HTTPS
+    # command:
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" # Access Docker socket
+      - "./letsencrypt:/letsencrypt"
+    networks:
+      - web
+
+  app:
+    build: .
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app.rule=Host(`yourdomain.com`)" # Replace with your domain
+      - "traefik.http.routers.app.entrypoints=websecure"
+      - "traefik.http.routers.app.tls=true"
+      - "traefik.http.routers.app.tls.certresolver=myresolver"
+      - "traefik.http.services.app.loadbalancer.server.port=8000"
+    env_file:
+      - .env
+    networks:
+      - web
+
+networks:
+  web:
+    name: web
+    driver: bridge
