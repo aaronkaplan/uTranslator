@@ -12,6 +12,8 @@ RUN apk update && apk add --no-cache build-base libffi-dev curl
 RUN adduser -D appuser
 
 # Set the working directory to /app
+# create a working directory
+RUN mkdir /app
 WORKDIR /app
 
 # Copy and install Python dependencies
@@ -19,7 +21,7 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the entire application code to the working directory
-COPY . .
+COPY app /app
 
 # Change ownership of the application directory to the non-root user
 RUN chown -R appuser:appuser /app
@@ -35,5 +37,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:9948/healthcheck || exit 1
 
 # Define the default command to run the application using Uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9948"]
+CMD ["uvicorn", "main:app",  "--access-log", "--reload", "--host", "0.0.0.0", "--port", "9948"]
 

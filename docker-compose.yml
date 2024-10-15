@@ -21,26 +21,28 @@ services:
   #     - web
 
   utranslator:
-    #build: .
     image: utranslator:0.1
-    container_name: utranslator
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - VERSION="0.1"
+    environment:
+      PYTHONPATH: /app
+    env_file: 
+      - ".env"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`utranslator.lo-res.org`)" # Replace with your domain
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls=true"
-      - "traefik.http.routers.app.tls.certresolver=myresolver"
-      - "traefik.http.services.app.loadbalancer.server.port="9948"
-    env_file:
-      - .env
+      - "traefik.http.routers.utranslator.rule=Host(`utranslator.lo-res.org`)"
+      - "traefik.http.routers.utranslator.entrypoints=websecure"
+      - "traefik.http.routers.utranslator.tls.certresolver=myresolver"
+      - "traefik.http.services.utranslator.loadbalancer.server.port=9948"
     ports:
       - "9948:9948"
     networks:
       - web
-    depends_on:
-      - traefik
 
 networks:
   web:
-    name: web
-    driver: external
+    external: true
+
