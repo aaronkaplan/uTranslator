@@ -28,12 +28,12 @@ RUN chown -R appuser:appuser /app
 USER appuser
 
 # Expose port 8000 to allow communication with the server
-EXPOSE 8000
+EXPOSE 9948
 
 # Define the healthcheck to monitor the /healthcheck endpoint
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:8000/healthcheck || exit 1
+  CMD curl -f http://localhost:9948/healthcheck || exit 1
 
 # Define the default command to run the application using Uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "9948"]
 
