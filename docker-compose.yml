@@ -20,11 +20,12 @@ services:
     networks:
       - web
 
-  app:
+  uTranslator:
     build: .
+    container_name: uTranslator
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.app.rule=Host(`yourdomain.com`)" # Replace with your domain
+      - "traefik.http.routers.app.rule=Host(`utranslator.lo-res.org`)" # Replace with your domain
       - "traefik.http.routers.app.entrypoints=websecure"
       - "traefik.http.routers.app.tls=true"
       - "traefik.http.routers.app.tls.certresolver=myresolver"
@@ -33,6 +34,8 @@ services:
       - .env
     networks:
       - web
+    depends_on:
+      - traefik
 
 networks:
   web:
