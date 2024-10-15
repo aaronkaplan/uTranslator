@@ -37,6 +37,23 @@ Call the service with a JSON payload containing the following fields:
   - "deepl"
 
 
+# How to run the service and install everything?
+
+```bash
+
+git clone https://github.com/aaronkaplan/uTranslator.git
+
+cd uTranslator
+
+virtualenv --python=python3.10 venv
+sourve venv/bin/activate
+cp env.example .env
+<edit .env>
+export PYTHONPATH=$(pwd)/app
+
+uvicorn app.main:app --host=0.0.0.0 --reload
+```
+
 
 # Example cURL request
 
