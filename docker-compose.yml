@@ -20,9 +20,9 @@ services:
     networks:
       - web
 
-  uTranslator:
+  utranslator:
     build: .
-    container_name: uTranslator
+    container_name: utranslator
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`utranslator.lo-res.org`)" # Replace with your domain
