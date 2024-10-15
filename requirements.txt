@@ -1,0 +1,11 @@
+fastapi
+openai
+deepl
+pydantic-settings>=0.2.0
+
+# langchain stuff
+langchain
+langchain-openai
+langchain-ollama
+langchain-anthropic
+langchain-groq
